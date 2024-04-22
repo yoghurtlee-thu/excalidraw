@@ -11,6 +11,7 @@ import { updateFrameMembershipOfSelectedElements } from "../frame";
 import { t } from "../i18n";
 import { CODES, KEYS } from "../keys";
 import { isSomeElementSelected } from "../scene";
+import { StoreAction } from "../store";
 import { AppClassProperties, AppState } from "../types";
 import { arrayToMap, getShortcutKey } from "../utils";
 import { register } from "./register";
@@ -32,7 +33,11 @@ const distributeSelectedElements = (
 ) => {
   const selectedElements = app.scene.getSelectedElements(appState);
 
-  const updatedElements = distributeElements(selectedElements, distribution);
+  const updatedElements = distributeElements(
+    selectedElements,
+    app.scene.getNonDeletedElementsMap(),
+    distribution,
+  );
 
   const updatedElementsMap = arrayToMap(updatedElements);
 
@@ -45,6 +50,7 @@ const distributeSelectedElements = (
 
 export const distributeHorizontally = register({
   name: "distributeHorizontally",
+  label: "labels.distributeHorizontally",
   trackEvent: { category: "element" },
   perform: (elements, appState, _, app) => {
     return {
@@ -53,7 +59,7 @@ export const distributeHorizontally = register({
         space: "between",
         axis: "x",
       }),
-      commitToHistory: true,
+      storeAction: StoreAction.CAPTURE,
     };
   },
   keyTest: (event) =>
@@ -75,6 +81,7 @@ export const distributeHorizontally = register({
 
 export const distributeVertically = register({
   name: "distributeVertically",
+  label: "labels.distributeVertically",
   trackEvent: { category: "element" },
   perform: (elements, appState, _, app) => {
     return {
@@ -83,7 +90,7 @@ export const distributeVertically = register({
         space: "between",
         axis: "y",
       }),
-      commitToHistory: true,
+      storeAction: StoreAction.CAPTURE,
     };
   },
   keyTest: (event) =>

@@ -2,7 +2,7 @@ import { MIN_FONT_SIZE, SHIFT_LOCKING_ANGLE } from "../constants";
 import { rescalePoints } from "../points";
 
 import { rotate, centerPoint, rotatePoint } from "../math";
-import {
+import type {
   ExcalidrawLinearElement,
   ExcalidrawTextElement,
   NonDeletedExcalidrawElement,
@@ -31,11 +31,11 @@ import {
 import { mutateElement } from "./mutateElement";
 import { getFontString } from "../utils";
 import { updateBoundElements } from "./binding";
-import {
+import type {
   MaybeTransformHandleType,
   TransformHandleDirection,
 } from "./transformHandles";
-import { Point, PointerDownState } from "../types";
+import type { Point, PointerDownState } from "../types";
 import Scene from "../scene/Scene";
 import {
   getApproxMinLineWidth,
@@ -876,7 +876,7 @@ export const resizeMultipleElements = (
     }
   }
 
-  Scene.getScene(elementsAndUpdates[0].element)?.informMutation();
+  Scene.getScene(elementsAndUpdates[0].element)?.triggerUpdate();
 };
 
 const rotateMultipleElements = (
@@ -938,7 +938,7 @@ const rotateMultipleElements = (
       }
     });
 
-  Scene.getScene(elements[0])?.informMutation();
+  Scene.getScene(elements[0])?.triggerUpdate();
 };
 
 export const getResizeOffsetXY = (

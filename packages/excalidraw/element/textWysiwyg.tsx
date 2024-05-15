@@ -12,13 +12,13 @@ import {
   isTextElement,
 } from "./typeChecks";
 import { CLASSES } from "../constants";
-import {
+import type {
   ExcalidrawElement,
   ExcalidrawLinearElement,
   ExcalidrawTextElementWithContainer,
   ExcalidrawTextElement,
 } from "./types";
-import { AppState } from "../types";
+import type { AppState } from "../types";
 import { bumpVersion, mutateElement } from "./mutateElement";
 import {
   getBoundTextElementId,
@@ -39,7 +39,7 @@ import {
   actionIncreaseFontSize,
 } from "../actions/actionProperties";
 import { actionZoomIn, actionZoomOut } from "../actions/actionCanvas";
-import App from "../components/App";
+import type App from "../components/App";
 import { LinearElementEditor } from "./linearElementEditor";
 import { parseClipboard } from "../clipboard";
 import {
@@ -226,6 +226,8 @@ export const textWysiwyg = ({
       if (!container) {
         maxWidth = (appState.width - 8 - viewportX) / appState.zoom.value;
         textElementWidth = Math.min(textElementWidth, maxWidth);
+      } else {
+        textElementWidth += 0.5;
       }
 
       // Make sure text editor height doesn't go beyond viewport
@@ -644,7 +646,7 @@ export const textWysiwyg = ({
   };
 
   // handle updates of textElement properties of editing element
-  const unbindUpdate = Scene.getScene(element)!.addCallback(() => {
+  const unbindUpdate = Scene.getScene(element)!.onUpdate(() => {
     updateWysiwygStyle();
     const isColorPickerActive = !!document.activeElement?.closest(
       ".color-picker-content",
